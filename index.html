@@ -1,345 +1,260 @@
 <!DOCTYPE html>
-<!-- saved from url=(0118)file:///Users/potato/Desktop/%E4%BA%8C_%E8%AF%8D%E8%AF%AD_%E6%88%90%E8%AF%AD_%E7%99%BE%E5%BA%A6%E6%B1%89%E8%AF%AD.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点击气球游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            margin: 0 auto;
+            background-color: #e6f7ff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 70px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+        
+        .balloon:before {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 15px;
+            background-color: #ff6b6b;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+        }
+        
+        .balloon:after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 30px;
+            background-color: #ccc;
+        }
+        
+        .balloon:hover {
+            transform: scale(1.05);
+        }
+        
+        .balloon.popped {
+            transform: scale(1.2);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        #score-display {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #333;
+        }
+        
+        #timer-display {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        #start-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #start-btn:hover {
+            background-color: #45a049;
+        }
+        
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        #final-score {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <h1>点击气球游戏</h1>
+    <p>在30秒内点击尽可能多的气球！</p >
     
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="https://m.baidu.com/static/index/icon/w_icon2.png" type="image/x-icon">
-            <meta name="keywords" content="二">
-        <meta name="description" content="百度汉语_二: ">
-        <title>首师附</title>
-        <script src="file://hm.baidu.com/hm.js?010e9ef9290225e88b64ebf20166c8c4"></script><script async="" src="file:///images/logo.jpg"></script><script src="file:///images/logo.jpg"></script><script>
-  var _hmt = _hmt || [];
-  (function() {
-    var hm = document.createElement("script");
-    hm.src = "//hm.baidu.com/hm.js?010e9ef9290225e88b64ebf20166c8c4";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-            <link rel="stylesheet" href="./首师附_files/main.css">
-    <link rel="stylesheet" type="text/css" href="./首师附_files/style.css">
-    <link rel="stylesheet" type="text/css" href="./首师附_files/wordstroke-pc.css">
-    <script data-require-id="main" src="./首师附_files/main.js" async=""></script><script data-require-id="sug_pc" src="./首师附_files/sug_pc.js" async=""></script><script data-require-id="ubcUtils" src="./首师附_files/ubcUtils.js" async=""></script><script data-require-id="etpl/main" src="./首师附_files/main(1).js" async=""></script><script data-require-id="ellipsis" src="./首师附_files/ellipsis.js" async=""></script><script data-require-id="etpl/tpl" src="./首师附_files/tpl.js" async=""></script></head>
-
-<body class="pc module" id="pc-word-body" data-name="二">
-
-<div style="display:none">
-    <script type="text/javascript">
-        window.__start_time = +(new Date());
+    <div id="score-display">得分: <span id="score">0</span></div>
+    <div id="timer-display">剩余时间: <span id="time">30</span>秒</div>
+    <button id="start-btn">开始游戏</button>
+    
+    <div id="game-container">
+        <div id="game-over">
+            <h2>游戏结束!</h2>
+            <p>你的最终得分是:</p >
+            <div id="final-score">0</div>
+            <button id="restart-btn">再玩一次</button>
+        </div>
+    </div>
+    
+    <script>
+        // 游戏变量
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let timerInterval;
+        let isGameRunning = false;
+        const colors = ['#ff6b6b', '#ffa502', '#2ed573', '#1e90ff', '#a55eea', '#ff7f50'];
+        
+        // DOM元素
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const startBtn = document.getElementById('start-btn');
+        const gameOverDiv = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // 创建气球
+        function createBalloon() {
+            if (!isGameRunning) return;
+            
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            
+            // 随机位置
+            const x = Math.random() * (gameContainer.offsetWidth - 60);
+            const y = Math.random() * (gameContainer.offsetHeight - 80);
+            
+            // 随机颜色
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.backgroundColor = color;
+            
+            // 随机大小
+            const size = 40 + Math.random() * 40;
+            balloon.style.width = `${size}px`;
+            balloon.style.height = `${size * 1.2}px`;
+            
+            // 设置位置
+            balloon.style.left = `${x}px`;
+            balloon.style.top = `${y}px`;
+            
+            // 点击事件
+            balloon.addEventListener('click', function() {
+                if (balloon.classList.contains('popped')) return;
+                
+                balloon.classList.add('popped');
+                score++;
+                scoreDisplay.textContent = score;
+                
+                // 播放声音效果（简单版）
+                const popSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...');
+                popSound.volume = 0.2;
+                popSound.play().catch(e => {});
+                
+                setTimeout(() => {
+                    balloon.remove();
+                }, 300);
+            });
+            
+            gameContainer.appendChild(balloon);
+            
+            // 气球自动消失
+            setTimeout(() => {
+                if (!balloon.classList.contains('popped')) {
+                    balloon.remove();
+                }
+            }, 3000 + Math.random() * 2000);
+        }
+        
+        // 开始游戏
+        function startGame() {
+            if (isGameRunning) return;
+            
+            // 重置游戏状态
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = score;
+            timeDisplay.textContent = timeLeft;
+            gameOverDiv.style.display = 'none';
+            
+            // 清除所有现有气球
+            const balloons = document.querySelectorAll('.balloon');
+            balloons.forEach(balloon => balloon.remove());
+            
+            isGameRunning = true;
+            startBtn.disabled = true;
+            
+            // 创建气球
+            gameInterval = setInterval(createBalloon, 800);
+            
+            // 计时器
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        // 结束游戏
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(gameInterval);
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+            
+            // 显示游戏结束画面
+            finalScoreDisplay.textContent = score;
+            gameOverDiv.style.display = 'block';
+        }
+        
+        // 事件监听
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
     </script>
-</div>
-<div id="search-bar">
-    <div class="wrapper">
-        <div style="margin-right:300px;position: relative">
-    <div class="dict-logo"><a href="https://hanyu.baidu.com/" title="首都师大附中"></a></div>
-    <div class="search-box module" id="search-box" style="34px;">
-        <form name="f" id="form" action="https://hanyu.baidu.com/s" class="fm">
-            <span class="bg s_ipt_wr quickdelete-wrap">
-                <input id="kw" name="wd" class="s_ipt" placeholder=" " value="向世界介绍首都师大附中" maxlength="40" autocomplete="off">
-                <input name="from" value="zici" type="hidden">
-            </span>
-            <span class="bg s_btn_wr focus">
-               
-                <img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;" src="https://www.cnuhs.cn/images/logo.jpg" width="193" height="51">
-            </span>
-        </form>
-        <div class="suggest-div">
-            <div class="suggest-content">
-            </div>
-        </div>
-    </div>
-</div>
-
-        <div class="wrap-userbar module" id="wrap-userbar">
-
-    <ul class="userbar logout">
-    <li class="userbar-item">
-        <a href="https://baike.baidu.com/link?url=9vUsunMpICxSfom9XapfiihNICec5iDaTwbRjAtiwrcGuGuH8PKTQGawWobBnEdsQyuLjyNpc48v5_0CWRsSXgXziRgBugJmm0y9x43riLllYQ-8jEYhgsXj8MeKG2QKRQNWUssYdxaZpmUU9ukzhU0Mf72RFJ1S27t0dO0vL5LCN9LLemOD8AYa-EKhJp3yUG449A4AetfcDAS1O9KPzq" id="login_link">学校百度</a>
-    </li>
-    <li class="pipe userbar-item"></li>
-    <li><a href="https://www.cnuhs.cn/upload/images/2019/7/340114ac353883bf.jpg" name="tj_cidian" class="userbar-item download-link">首师附校歌乐谱</a></li>
-    <li class="pipe userbar-item"></li>
-    <li class="userbar logout">
-        <a href="https://www.cnuhs.cn/upload/images/2019/7/340114ac353883bf.jpg" target="_blank"></a>
-    </li>
-    </ul>
-</div>
-    </div>
-</div>
-<!-- 外层包裹 -->
-<div id="body-wrapper">
-    <div id="main" class="module">
-        <div class="app-qrcode" style="left: 45.125px;">
-</div>
-
-        <div class="left nav-list module" id="nav-list" style="left: 192.5px;"></div>
-        <div class="content-panel module" id="content-panel">
-            <div id="qa-tip" style="display:none"></div>
-                                    <input type="hidden" id="resultType" value="word">
-                    <div class="tab-list module" id="word-body" data-prop="">
-    <!-- 头部 -->
-    <div id="word-header" class="header-info">
-        <div id="header-img">
-                        <div class="alter-text" style="background-image: url(https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3491777735,889451656&amp;fm=58)">
-                                <img id="word_bishun" class="bishun_play" data-gif="https://img.mp.sohu.com/upload/20170627/8cacfc4706e043ddbcbe1809717ea4c3_th.png" src="./首师附_files/8cacfc4706e043ddbcbe1809717ea4c3_th.png">
-                            </div>
-                    </div>
-        <div id="header-detail">
-            <ul id="header-list">
-                <li id="tone_py">
-                    <span>学校名称：</span>
-                    <span>
-                        <div class="pronounce" id="pinyin">
-                                                            <span>
-                                    <b>首都师范大学附属中学</b>
-                                    <a herf="#" url="https://hanyu-word-pinyin-short.cdn.bcebos.com/er4.mp3" class="mp3-play">&nbsp;</a>
-                                </span>
-                                                    </div>
-                    </span>
-                </li>
-                                    <li id="radical">
-                        <span>学校简称：<span>
-                        <span>首师附 /</span>
-                        <span>首都师大附中</span>
-                    </span></span></li>
-                                                    <li id="stroke_count">
-                        <span>在校学生：</span>
-                        <span>2800+</span>
-                    </li>
-                                                    <li id="wuxing">
-                        <span> 网站制作：</span>
-                        <span> 初一四班 孙昊辰</span>
-                    </li>
-                                                    <li id="traditional">
-                        <span> 改的百度搜索</span>
-                        <span> 敲的源码</span>
-                    </li>
-                                                    <li id="wubi">
-                        <span> </span>
-                        <span> </span>
-                    </li>
-                            </ul>
-        </div>
-        
-
-    </div>
-
-    
-    <!-- 解释 -->
-    <!-- 解释 -->
-    <div class="content means imeans" data-group="imeans" id="basicmean-wrapper">
-        <h1><b class="title active" id="basicmean" data-group="imeans">基本释义</b><span class="seg"></span>
-                            <a href="javascript:void(0);" class="title disactive" data-for="detailmean">详细释义</a>
-                <span class="seg"></span>
-                    </h1>
-        <div class="tab-content srow">
-                            <dl>
-                                        <dd>
-                                                    <p>校长寄语：  百年积淀的深厚底蕴形成首都师大附中质朴而隽永的办学风格，“自觉、勤奋、求实、创新”是历代附中人教育智慧的凝练，“成德达才”的教育思想历久弥新。
-
-                                                        首都师大附中把对“人”的培养视为教育的终极目标，注重提升精神素养，远离浮躁与功利；秉承“人本、和谐、创新”的管理理念，兼收并蓄，彰显开放包容的时代气息，用心血、激情和社会责任感凝聚教育信心，践行教育理想；坚守“爱国、科学、人文”的教育理念，因材施教，培育厚德博学的创新人才，于恬静、淡定和潜移默化中蕴含教育智慧，培养社会精英。
-                                                        
-                                                        首都师大附中为青年教师和莘莘学子播种希望、放飞理想、营造广阔的空间，在这里可以尽享人生关爱、学术滋养和事业发展。首都师大附中始终以健康阳光的心态谱写育人的华章，以率真豁达的雅量绽放生命的精彩。</p>
-                                            </dd>
-                </dl>
-                    </div>
-                <div class="more-button" style="display: none;">
-            <a href="javascript:void(0);" class="f" data-for="basicmean"><b>︾</b>查看更多</a>
-            <a href="javascript:void(0);" class="e" data-for="basicmean"><b>︽</b>收起更多</a>
-        </div>
-    </div>
-
-<!-- 解释 -->
-    <div class="content means imeans" id="detailmean-wrapper" data-group="imeans" style="display: none">
-        <h1>
-                           
-            <b class="title active" id="detailmean" data-group="imeans"> </b></h1>
-        <span class="seg"></span>
-        <div class="tab-content">
-            <dl><dt><a>二 [èr]</a></dt><dd><p><strong>〈形〉</strong></p><ol><li><p>［数］</p></li><li><p>(会意。古文字二用两横画表示,是原始记数符号)</p></li><li><p>一加一的和</p><p>二,地之数也。从耦一,会意。古文又从弋。——《说文》</p><p>因二以济民行。——《易·系辞》。虞注:“谓乾与坤也。后世官书以贰为之,为防奸易。”</p><p>赐也闻一以知二。——《论语·公冶长》</p><p>大父未死而有二十五孙。——《韩非子·五蠹》</p><p>又如:二加四得六;总数为二;二府(大肠和小肠;二太爷);二形(男女两性);二难(指难兄难弟,即蔡、宋两御史);二仪(两仪。指天地、阴阳);二纪(二十四年。一纪为十二年);二氏(释教与道教);二军(汉代禁卫军之南军和北军);二南(原指《诗经》中的《周南》与《召南》借指淑女与君子相配);二星(银子二钱。星,秤杆上的记数点);二天(再嫁;嫁二夫)</p></li><li><p>百位数后接着整数二十时对二十的省称 。</p><p>如:一百二</p></li><li><p>千位数后接着整数二百时对二百的省称 。</p><p>如:八千二</p></li><li><p>万位数后接着整数二千时对二千的省称 。</p><p>如:四万二</p></li><li><p>排列顺序中第二位的</p><p>一男附书至,二男新战死。——唐· 杜甫《石壕吏》</p><p>又如:二手(副手,二把手);二尹(知县副职县丞的别称);二舍(二公子,二少爷。舍:舍人。原为官名,后用以称显贵人家子弟);二甲(殿试的第二等);二门(指大门内的一道总门)</p></li></ol><ol><li><p>两样;有区别 。</p><p>如:二屋里(另住一处。比喻说话岔了道);二价(异议)</p></li><li><p>不专一;不忠诚 。</p><p>如:有二心;二四(放肆,胡作非为);二三(三心二意)</p></li></ol></dd></dl>
-        </div>
-                <div class="more-button">
-            <a href="javascript:void(0);" class="f" data-for="detailmean"><b>︾</b>查看更多</a>
-            <a href="javascript:void(0);" class="e" data-for="detailmean"><b>︽</b>收起更多</a>
-        </div>
-    </div>
-<div class="dialog-mask" id="upload-dialog-mask"></div>
-<div class="layer uploadMeans-layer" id="upload-dialog">
-    <div class="layer-hd">
-        <h3 class="layer-hd-title">贡献释义</h3>
-        <a href="https://hanyu.baidu.com/zici/s?from=aladdin&amp;query=%E4%BA%8C&amp;srcid=51368&amp;wd=%E4%BA%8C#" title="关闭" class="layer-hd-close"></a>
-        <p class="layer-hd-des">请上传符合模板格式的Excel文档</p>
-    </div>
-    <div class="layer-bd uploadMeans-layer-bd">
-        <input id="fileInput" title="" type="file" name="files" accept=".xls, .xlsx, .xlst, .xlsm, .xlsb">
-        <div class="upload-content">
-            <img class="upload-icon" src="./首师附_files/upload.png">
-            <div class="upload-des">上传Excel文档</div>
-        </div>
-        <div class="progress-bar progress-bar-hide">
-            <span class="fileName"></span>
-            <span class="progressNum">0%</span>
-            <progress value="0" max="100" class="bar" style="width:151px;height:4px"></progress>
-        </div>
-        <div class="file-list file-list-hide">
-            <img class="excel-icon" src="./首师附_files/excel-icon.png">
-            <span class="file-name"></span>
-            <a href="https://hanyu.baidu.com/zici/s?from=aladdin&amp;query=%E4%BA%8C&amp;srcid=51368&amp;wd=%E4%BA%8C#" title="删除" class="remove-file"></a>
-        </div>
-    </div>
-    <div class="btn-area">
-        <button id="cancel-upload">取消</button>
-        <button id="submit-btn" class="submit-btn-able submit-btn-disable">提交</button>
-    </div>
-    <div class="confirm-remove-dialog confirm-remove-dialog-hide">
-        <div class="shixin"></div>
-        <div class="kongxin"></div>
-        <p>确认要删除这个文档吗？</p>
-        <div class="confirm-btn-area">
-            <button id="cancel-confirm">取消</button>
-            <button id="confirm-btn">确认</button>
-        </div>
-    </div>
-</div>
-<div class="layer upload-success-layer" id="success-dialog">
-    <a href="https://hanyu.baidu.com/zici/s?from=aladdin&amp;query=%E4%BA%8C&amp;srcid=51368&amp;wd=%E4%BA%8C#" title="关闭" class="succ-dialog-close"></a>
-    <img class="succ-icon" src="./首师附_files/success.png">
-    <p class="succ-title">内容已提交</p>
-    <p class="succ-des">释义内容已提交，百度汉语感谢您的帮助与贡献</p>
-    <button id="close-btn">关闭</button>
-</div>
-<div class="toast-wrap J_Toast">
-    <div class="toast">
-        <img class="error-icon" src="./首师附_files/error.png">
-        <span class="toast-text"></span>
-    </div>
-</div>
-
-    <!-- 表格解释 -->
-    
-
-
-        <div class="card word-detail">
-                <div class="word-stroke">
-            <div class="word-stroke-name">学校风采</div>
-            <div class="word-stroke-wrap">
-                                <div class="word-stroke-detail">
-                    <div class="word-stroke-unit">
-                        <div>
-                            
-                                <g transform="translate(3, 70) scale(0.07, -0.07)">
-                                    <img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;" src="./首师附_files/17.jpg" width="205" height="136">
-                                                                                                                                                                                                                                    </g>
-                            
-                        </div>
-                            <span class="word-stroke-part-num"></span>
-                            <span>赤心报国钟</span>
-                        </div>
-                    </div>
-                    <div class="word-stroke-val"></div>
-                </div>
-                                <div class="word-stroke-detail">
-                    <div class="word-stroke-unit">
-                        <div>
-                                <g transform="translate(3, 70) scale(0.07, -0.07)">
-                                                                                                                   </g>
-                            
-                        </div>
-                        <div class="word-stroke-part">
-                            <span class="word-stroke-part-num"></span>
-                            <span>一</span>
-                        </div>
-                    </div>
-                    <div class="word-stroke-val"></div>
-                </div>
-                            </div>
-        </div>
-            </div>
-        
-   
-    
-    <!-- 近义词部分 -->
-    <!-- 近反义词 -->
-<div id="syn_ant" class="mark"></div>
-<div class="content module" id="syn_ant_wrapper">
-    <h1><b class="title" data-id="syn_ant">学校官网</b></h1>
-    <div class="tab-content syn_ant">
-                <div id="synonym">
-            <label>网址： </label>
-            <div class="block">
-                               <a href="https://www.cnuhs.cn/SchoolProfile/36.html"><span>首师附</span>
-                            </a></div><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-        </a></div><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-                    </a></div><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-</a></div><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-
-
-    <!-- 百度翻译部分 -->
-    
-</a></div><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-
-                        </a><div id="right-panel" class="right module"><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-            </a><div class="recmd-panel module" id="recmd-panel"><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-                                </a><div class="list"><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-                </a><div class="recmd-wrapper"><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-    <h1>其他图片</h1>
-    </a><ul class="recmd-list "><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-                </a><li class="recmd-item recmd-item-grid"><a href="https://www.cnuhs.cn/SchoolProfile/36.html">
-        
-            <img src="./首师附_files/1.jpg" width="78px" height="78px">
-        </a><a href="./首师附_files/1.jpg" class="text-link">首师附发展史</a>
-        
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/2.jpg" width="78px" height="78px">
-        <a href="./首师附_files/2.jpg" class="text-link">首师附学校大门</a>
-    </li>
-                <li class="recmd-item recmd-item-grid">
-                    <img src="./首师附_files/3.jpg" width="78px" height="78px">
-                    <a href="./首师附_files/3.jpg" class="text-link">达才楼和喷泉</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/4.jpg" width="78px" height="78px">
-        <a href="./首师附_files/4.jpg" class="text-link">综合楼</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/5.jpg" width="78px" height="78px">
-        <a href="./首师附_files/5.jpg" class="text-link">第二体育馆</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/7.jpg" width="78px" height="78px">
-        <a href="./首师附_files/7.jpg" class="text-link">学生食堂</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/8.jpg" width="78px" height="78px">
-        <a href="./首师附_files/8.jpg" class="text-link">实验楼</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/9.jpg" width="78px" height="78px">
-        <a href="./首师附_files/9.jpg" class="text-link">食堂和喷泉</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/10.jpg" width="78px" height="78px">
-        <a href="./首师附_files/10.jpg" class="text-link">学校花坞(已拆除)</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/11.jpg" width="78px" height="78px">
-        <a href="./首师附_files/11.jpg" class="text-link">花园</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/12.jpg" width="78px" height="78px">
-        <a href="./首师附_files/12.jpg" class="text-link">伟人石雕</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/13.jpg" width="78px" height="78px">
-        <a href="./首师附_files/13.jpg" class="text-link">林荫小道</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/14.jpg" width="78px" height="78px">
-        <a href="./首师附_files/14.jpg" class="text-link">健身器材(已拆除)</a>
-    </li>
-    <li class="recmd-item recmd-item-grid">
-        <img src="./首师附_files/15.jpg" width="78px" height="78px">
-        <a href="./首师附_files/15.jpg" class="text-link">绿色草坪</a>
-  </li></ul></div></div></div></div></div></div></div></body></html>
+</body>
+</html>
