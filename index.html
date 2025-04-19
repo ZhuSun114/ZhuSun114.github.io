@@ -160,7 +160,7 @@
         function createBalloon() {
             if (!isGameRunning) return;
             
-            const balloon = document.createElement('div');
+            const balloon = document.getElementById('restart-btn'); //document.createElement('div');
             balloon.className = 'balloon';
             
             // 随机位置
