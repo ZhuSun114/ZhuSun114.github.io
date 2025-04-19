@@ -165,14 +165,14 @@
             // 随机颜色
             const color = colors[Math.floor(Math.random() * colors.length)];
             balloon.style.backgroundColor = color;
-            tuan.style.backgroundColor = color;
+            tuanch.style.backgroundColor = color;
             
             // 随机大小
             const size = 40 + Math.random() * 40;
             balloon.style.width = `${size}px`;
             balloon.style.height = `${size}px`;
-            tuanch.style.width = `${size}px`;
-            tuanch.style.height = `${size}px`;
+            tuanch.style.width = `${size - 40}px`;
+            tuanch.style.height = `${size - 40}px`;
             
             // 设置位置
             balloon.style.left = `${x}px`;
