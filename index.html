@@ -160,7 +160,7 @@
         function createBalloon() {
             if (!isGameRunning) return;
             
-            const balloon = document.getElementById('restart-btn'); //document.createElement('div');
+            const balloon = document.createElement('div');
             balloon.className = 'balloon';
             
             // 随机位置
@@ -174,7 +174,7 @@
             // 随机大小
             const size = 40 + Math.random() * 40;
             balloon.style.width = `${size}px`;
-            balloon.style.height = `${size * 1.2}px`;
+            balloon.style.height = `${size}px`;
             
             // 设置位置
             balloon.style.left = `${x}px`;
