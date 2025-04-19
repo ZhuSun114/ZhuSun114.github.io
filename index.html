@@ -41,30 +41,26 @@
             box-shadow: inset -5px -5px 10px rgba(256, 256, 256, 0.2);
             transition: transform 0.1s;
         }
+        .balloon:before,
+        .balloon:after {
+        content: ''; 
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background-color: black;
+        border-radius: 50%;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+        transition: transform 0.1s;
+        }
+
         .balloon:before {
-            content: ''; 
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: rgba(200, 200, 0, 0.5); 
-            border-radius: 50%;
-            top: 10px; 
-            left: 0px;
-            box-shadow: inset 0px 5px 1px rgba(256, 256, 256, 0.2);
-            transition: transform 0.1s;
+        top: 10px; 
+        left: 5px; 
         }
 
         .balloon:after {
-            content: ''; 
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: rgba(200, 200, 0, 0.5); 
-            border-radius: 50%;
-            top: 20px; 
-            left: -10px; 
-            box-shadow: inset 0px 5px 1px rgba(256, 256, 256, 0.2);
-            transition: transform 0.1s;
+        top: 20px; 
+        left: -5px;
         }
         
         .balloon:hover {
