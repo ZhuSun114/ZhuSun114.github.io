@@ -204,7 +204,7 @@
                 if (!balloon.classList.contains('popped')) {
                     balloon.remove();
                 }
-            }, 3000 + Math.random() * 2000);
+            }, 3000 + Math.random() * 2);
         }
         
         // 开始游戏
@@ -226,7 +226,7 @@
             startBtn.disabled = true;
             
             // 创建气球
-            gameInterval = setInterval(createBalloon, 80);
+            gameInterval = setInterval(createBalloon, 800);
             
             // 计时器
             timerInterval = setInterval(() => {
