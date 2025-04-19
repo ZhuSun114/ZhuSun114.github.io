@@ -187,7 +187,7 @@
                 balloon.classList.add('popped');
                 score++;
                 scoreDisplay.textContent = score;
-                tuanch.remove();
+                //tuanch.remove();
                 
                 // 播放声音效果（简单版）
                 const popSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...');
@@ -196,6 +196,7 @@
                 
                 setTimeout(() => {
                     balloon.remove();
+                    tuanch.remove();
                 }, 300);
             });
             
@@ -205,6 +206,7 @@
             setTimeout(() => {
                 if (!balloon.classList.contains('popped')) {
                     balloon.remove();
+                    tuanch.remove();
                 }
             }, 3000 + Math.random() * 2000);
         }
