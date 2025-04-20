@@ -1,0 +1,65 @@
+.dialog {
+    position: absolute;
+    left: 90px;
+    bottom: 10px;
+    padding: 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transform: translate(-300%, 0);
+}
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    background-color: #666666;
+    border: 4px solid #333333;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #dddddd;
+}
+
+.dialog-content > * {
+    display: inline;
+}
+
+.dialog-content {
+    display: flex;
+    align-items: center;
+}
+
+#settings-dialog {
+    width: max-content;
+    height: max-content;
+    background-color: #aaaaaa;
+    border-radius: 9px;
+    border: #8a8a8a 6px solid;
+}
+
+@keyframes open_dialog {
+    from {
+        transform: translate(-200%, 0);
+    }
+
+    to {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes close_dialog {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-200%, 0);
+    }
+}

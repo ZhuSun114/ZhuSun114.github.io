@@ -1,0 +1,454 @@
+@use './utils/button.scss';
+@use './utils/rarity.scss';
+@use './utils/dialogs.scss';
+
+$none_bg: #fff;
+$none_bd: #ccc;
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap');
+
+*{
+    font-family: 'Ubuntu', sans-serif;
+    user-select: none;
+}
+
+body {
+  background-color: #29ca77;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.15) 2%, rgba(0, 0, 0, 0) 5%), linear-gradient(0deg, rgba(0, 0, 0, 0.15) 2%, rgba(0, 0, 0, 0) 5%);
+  background-size: 20px 20px;
+  overflow: hidden;
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#game-over-title {
+    font-size: 20px;
+}
+
+#game-over-murderer {
+    font-size: 30px;
+}
+
+#game-over-kills {
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+#btn-continue {
+    margin-top: 20px;
+    height: 35px;
+    width: 120px;
+    font-size: 20px;
+}
+
+#out-game-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#main {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  margin-top: -60px;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#title {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 70px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+#name {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 25px;
+  color: black;
+  border: black solid 4px;
+    outline: 0;
+    padding: 5px;
+  height: 30px;
+  width: 300px;
+}
+
+#btn-ready {
+  font-weight: bold;
+  margin-left: 5px;
+  height: 35px;
+  width: 80px;
+  font-size: 20px;
+}
+
+[textStroke] {
+  position: relative;
+  z-index: 0;
+  --x: 0.1em;
+}
+
+[textStroke]:before{
+  position: absolute;
+  z-index: -1;
+  content: attr(textStroke);
+  -webkit-text-stroke: var(--x) #000;
+}
+
+.line-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.column-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#bottom-left-buttons {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+#btn-inventory {
+  background-image: url('../../public/img/ui/inventory.svg');
+  margin-bottom: 5px;
+}
+
+#btn-craft {
+  background-image: url('../../public/img/ui/craft.svg');
+  margin-bottom: 5px;
+}
+
+#btn-settings {
+    background-image: url('../../public/img/ui/settings.svg');
+    margin-bottom: 5px;
+}
+
+#in-game-screen {
+    display: none;
+}
+
+#canvas {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#hud {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#hud>.petal-column {
+    position: absolute;
+    bottom: 15px;
+}
+
+.equipped-petals-row {
+    margin-top: 15px;
+    display: flex;
+}
+
+.preparation-petals-row {
+    margin-top: 8px;
+    display: flex;
+}
+
+.petal {
+    width: 100%;
+    height: 100%;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 5px;
+}
+
+.dragging-petal {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+}
+
+.dragging-petal>.petal {
+    position: relative;
+    top: -5px;
+    left: -5px;
+    cursor: pointer;
+    border-width: 5px;
+}
+
+.petal-slot>.petal {
+    position: relative;
+    top: -4px;
+    left: -4px;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.equipped-petals-row>.petal-slot{
+    --x: 12px;
+    width: 50px;
+    height: 50px;
+}
+
+.preparation-petals-row>.petal-slot{
+    --x: 8px;
+    width: 35px;
+    height: 35px;
+}
+
+.petal-slot {
+    position: relative;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 5px;
+    margin: 0 4px;
+    background: $none_bg;
+    border-color: $none_bd;
+}
+
+.piece-petal {
+    position: absolute;
+}
+
+[petalName]:before{
+    content: attr(petalName);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: var(--x);
+    top: 80%;
+    left: 50%;
+    -webkit-text-stroke: 2px #000;
+}
+
+[petalName]:after{
+    content: attr(petalName);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: var(--x);
+    color: white;
+    top: 80%;
+    left: 50%;
+}
+
+img {
+    pointer-events: none;
+}
+
+#delete-petal {
+    margin-left: 5px;
+    width: 35px;
+    height: 35px;
+    background: #b7816d;
+    border: #9a7661 4px solid;
+}
+
+#petal-information {
+    position: absolute;
+    padding: 7px;
+    transform: translate(0, -100%);
+    background: rgba(0, 0, 0, 0.6);
+    height: max-content;
+    width: max-content;
+    border-radius: 5px;
+    color: white;
+}
+
+#petal-information > div {
+    margin: 0.1em 0;
+}
+
+#petal-information > div > p {
+    margin: 0;
+}
+
+#petal-information > p {
+    margin: 0;
+}
+
+.preparation-petals-row > .selecting-petal > .petal {
+    z-index: 2;
+    width: 130%;
+    height: 130%;
+    top: -8px;
+    left: -8px;
+    --x: 12px;
+    animation: shaking 1.6s infinite;
+}
+
+@keyframes shaking {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(10deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    75% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+#move-right{
+    position: absolute;
+    background: rgba(#000, 0.5);
+    top: 40%;
+    left: 60%;
+    width: 260px;
+    height: 90px;
+    border-radius: 6px;
+    z-index: 6;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+#floer-version {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 25px;
+    color: white;
+    opacity: 0.5;
+    z-index: 999;
+}
+
+#qq-box {
+    position: absolute;
+    padding: 2px;
+    top: 35px;
+    left: 5px;
+    width: 250px;
+    text-align: center;
+    height: 30px;
+    border-radius: 5px;
+    background: rgb(0, 202, 252);
+    border: rgb(0, 164, 204) 5px solid;
+    text-decoration: none;
+    color: white;
+}
+
+#discord-box {
+    position: absolute;
+    padding: 2px;
+    top: 90px;
+    left: 5px;
+    width: 250px;
+    text-align: center;
+    height: 30px;
+    border-radius: 5px;
+    background: #5c68f1;
+    border: #4a55cc 5px solid;
+    text-decoration: none;
+    color: white;
+}
+
+#chat-box {
+    position: absolute;
+    left: 5px;
+    bottom: 50px;
+}
+
+#chat-input {
+    width: 250px;
+    height: 15px;
+    font-size: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    outline: 0;
+    padding: 6px;
+}
+
+input::placeholder {
+    color: white;
+}
+
+#chat-input:focus {
+    background: white;
+    color: black;
+    border: black solid 2px;
+    padding: 5px;
+}
+
+#chat-messages {
+    min-width: 300px;
+    max-width: 500px;
+    max-height: 300px;
+    overflow: hidden;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    grid-gap: 3px;
+    margin-bottom: 8px;
+    padding-right: 5px;
+}
+
+.opened#chat-messages {
+    overflow-y: auto;
+    pointer-events: all;
+}
+
+.chat-message {
+    color: white;
+}
+
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.6);
+    background-clip: padding-box;
+}

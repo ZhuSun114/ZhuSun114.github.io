@@ -1,0 +1,56 @@
+@keyframes bright {
+  from {
+    filter: brightness(100%);
+  }
+
+  to {
+    filter: brightness(110%);
+  }
+}
+
+.btn {
+  border-radius: 5px;
+  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover{
+  filter: brightness(110%);
+  animation: bright 0.2s normal;
+}
+
+.btn-green {
+  color: white;
+  background-color: #31c901;
+  border: #228c01 solid 4px;
+}
+
+.btn-blue {
+  color: white;
+  background-color: #5a9fdb;
+  border: #487faf solid 4px;
+}
+
+.btn-gray {
+    color: white;
+    background-color: #aaaaaa;
+    border: #8a8a8a solid 4px;
+}
+
+.btn-craft-color {
+  color: white;
+  background-color: #db9d5a;
+  border: #af7e48 solid 4px;
+}
+
+.btn-big-block {
+    width: 70px;
+    height: 70px;
+    background-repeat: no-repeat;
+    background-position: 58% 50%;
+    background-size: 50px 50px;
+}
