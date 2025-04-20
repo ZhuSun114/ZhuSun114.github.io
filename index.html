@@ -14,7 +14,7 @@
             overflow: hidden;
             user-select: none;
         }
-        
+
         #game-container {
             position: relative;
             width: 100%;
@@ -25,7 +25,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-        
+
         .balloon {
             position: absolute;
             width: 60px;
@@ -41,7 +41,7 @@
             box-shadow: inset -5px -5px 10px rgba(256, 256, 256, 0.2);
             transition: transform 0.1s;
         }
-        
+
         .balloon:before,
         .balloon:after {
             content: ''; 
@@ -63,29 +63,29 @@
             top: 20px; 
             left: 23px;
         }
-        
+
         .balloon:hover {
             transform: scale(1.05);
         }
-        
+
         .balloon.popped {
             transform: scale(1.2);
             opacity: 0;
             transition: transform 0.3s, opacity 0.3s;
         }
-        
+
         #score-display {
             font-size: 24px;
             margin: 20px 0;
             color: #333;
         }
-        
+
         #timer-display {
             font-size: 20px;
             margin: 10px 0;
             color: #666;
         }
-        
+
         #start-btn {
             padding: 10px 20px;
             font-size: 18px;
@@ -96,11 +96,11 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         #start-btn:hover {
             background-color: #45a049;
         }
-        
+
         #game-over {
             position: absolute;
             top: 50%;
@@ -112,7 +112,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             display: none;
         }
-        
+
         #final-score {
             font-size: 24px;
             margin: 10px 0;
@@ -122,7 +122,7 @@
 </head>
 <body>
     <h1>点击团子游戏</h1>
-    <p>在30秒内点击尽可能多的团子！</p >
+    <p>在30秒内点击尽可能多的团子！</p>
     
     <div id="score-display">得分: <span id="score">0</span></div>
     <div id="timer-display">剩余时间: <span id="time">30</span>秒</div>
@@ -131,22 +131,19 @@
     <div id="game-container">
         <div id="game-over">
             <h2>游戏结束!</h2>
-            <p>你的最终得分是:</p >
+            <p>你的最终得分是:</p>
             <div id="final-score">0</div>
             <button id="restart-btn">再玩一次</button>
         </div>
     </div>
     
     <script>
-        // 游戏变量
         let score = 0;
         let timeLeft = 30;
-        let gameInterval;
         let timerInterval;
         let isGameRunning = false;
         const colors = ['#ff6b6b', '#ffa502', '#2ed573', '#1e90ff', '#a55eea', '#ff7f50'];
         
-        // DOM元素
         const gameContainer = document.getElementById('game-container');
         const scoreDisplay = document.getElementById('score');
         const timeDisplay = document.getElementById('time');
@@ -162,98 +159,140 @@
             const balloon = document.createElement('div');
             balloon.className = 'balloon';
             
-            // 随机位置
             const x = Math.random() * (gameContainer.offsetWidth - 60);
             const y = Math.random() * (gameContainer.offsetHeight - 60);
-            
-            // 随机颜色
             const color = colors[Math.floor(Math.random() * colors.length)];
-            balloon.style.backgroundColor = color;
-            
-            // 随机大小
             const size = 40 + Math.random() * 40;
+            
+            balloon.style.backgroundColor = color;
             balloon.style.width = `${size}px`;
             balloon.style.height = `${size}px`;
-            
-            // 设置位置
             balloon.style.left = `${x}px`;
             balloon.style.top = `${y}px`;
             
-            // 点击事件
-            balloon.addEventListener('click', function() {
-                if (balloon.classList.contains('popped')) return;
-                
+            balloon.addEventListener('click', function handleClick() {
                 balloon.classList.add('popped');
                 score++;
                 scoreDisplay.textContent = score;
                 
-                // 播放声音效果（简单版）
-                const popSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...');
-                popSound.volume = 0.2;
-                popSound.play().catch(e => {});
-                
+                // 移除气球并创建新的
                 setTimeout(() => {
                     balloon.remove();
+                    createBalloon(); // 点击后立即生成新的气球
                 }, 300);
             });
             
             gameContainer.appendChild(balloon);
             
-            // 气球自动消失
-            setTimeout(() => {
-                if (!balloon.classList.contains('popped')) {
-                    balloon.remove();
-                }
-            }, 3000 + Math.random() * 2);
+            // 气球自动消失（可选，如果需要保留自动消失逻辑）
+            // setTimeout(() => {
+            //     if (!balloon.classList.contains('popped')) {
+            //         balloon.remove();
+            //     }
+            // }, 3000 + Math.random() * 2000);
         }
         
-        // 开始游戏
         function startGame() {
             if (isGameRunning) return;
             
-            // 重置游戏状态
             score = 0;
             timeLeft = 30;
             scoreDisplay.textContent = score;
             timeDisplay.textContent = timeLeft;
             gameOverDiv.style.display = 'none';
-            
-            // 清除所有现有气球
             const balloons = document.querySelectorAll('.balloon');
             balloons.forEach(balloon => balloon.remove());
             
             isGameRunning = true;
             startBtn.disabled = true;
             
-            // 创建气球
-            gameInterval = setInterval(createBalloon, 800);
+            // 初始化创建第一个气球
+            createBalloon();
             
-            // 计时器
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timeDisplay.textContent = timeLeft;
-                
+
                 if (timeLeft <= 0) {
                     endGame();
                 }
             }, 1000);
         }
         
-        // 结束游戏
         function endGame() {
             isGameRunning = false;
-            clearInterval(gameInterval);
             clearInterval(timerInterval);
             startBtn.disabled = false;
             
-            // 显示游戏结束画面
             finalScoreDisplay.textContent = score;
             gameOverDiv.style.display = 'block';
         }
         
-        // 事件监听
         startBtn.addEventListener('click', startGame);
         restartBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
+
+<!准心部分-------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十字准心跟随鼠标</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .crosshair {
+            position: absolute;
+            pointer-events: none; /* 确保十字准心不会干扰鼠标事件 */
+            width: 40px;
+            height: 40px;
+            background-color: rgb(67, 123, 219);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(200, 200, 30, 0.5); 
+            transition: transform 0.1s;
+        }
+
+        .crosshair::before,
+        .crosshair::after {
+            content: ''; 
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+            transition: transform 0.1s;
+        }
+
+        .crosshair::before {
+            top: 15px; 
+            left: 18px; 
+        }
+        .crosshair::after {
+            top: 20px; 
+            left: 23px;
+        }
+    </style>
+</head>
+<body>
+    <div class="crosshair" id="crosshair"></div>
+
+    <script>
+        const crosshair = document.getElementById('crosshair');
+
+        document.addEventListener('mousemove', (event) => {
+            crosshair.style.left = `${event.clientX - 20}px`;
+            crosshair.style.top = `${event.clientY - 23}px`;
+        });
     </script>
 </body>
 </html>
