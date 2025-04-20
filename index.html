@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>floer.io</title>
+  </head>
+  <body>
+    <div id="floer-version" textStroke="floer.io v0.1.5">floer.io v0.1.5</div>
+    <div id="in-game-screen">
+        <canvas id="canvas"></canvas>
+        <div id="hud">
+            <div id="move-right" style="display: none">
+                <div style="font-size: 25px" textStroke="MOVE RIGHT!">MOVE RIGHT!</div>
+                <div style="font-size: 15px" textStroke="You are overleveled for this zone.">You are overleveled for this zone.</div>
+                <div style="font-size: 15px" textStroke="You will be unable to attack after">You will be unable to attack after</div>
+                <div id="move-right-time" style="font-size: 25px; color:indianred" textStroke="6s">6s</div>
+            </div>
+
+            <div id="chat-box">
+                <div id="chat-messages"></div>
+                <input type="text" id="chat-input" maxlength="40" placeholder="Press [ENTER] or click here to chat">
+            </div>
+        </div>
+    </div>
+    <div id="game-over-screen">
+        <div id="game-over-title" textStroke="You were destroyed by:">
+            You were destroyed by:
+        </div>
+        <div id="game-over-murderer" textStroke="Ohio">Ohio</div>
+        <div id="game-over-kills" textStroke="You killed 0 flowers this run.">You killed 0 flowers this run.</div>
+        <div id="btn-continue" class="btn btn-green" textStroke="Continue">Continue</div>
+    </div>
+    <div id="out-game-screen">
+        <a id="qq-box" target="_blank" class="btn" href="https://qm.qq.com/q/qbtteJj1Ly" textStroke="加入我们的QQ群！">
+            加入我们的QQ群！
+        </a>
+        <a id="discord-box" target="_blank" class="btn" href="https://discord.gg/bFFfkAUZxQ" textStroke="Join our Discord community!">
+            Join our Discord community!
+        </a>
+        <div id="main">
+            <span id="title" textStroke="floer.io">floer.io</span>
+            <div class="line-container">
+                <input id="name" value="">
+                <div id="btn-ready" class="btn btn-green" textStroke="Ready">Ready</div>
+            </div>
+            <div class="petal-column column-container">
+                <div class="equipped-petals-row"></div>
+                <div class="preparation-petals-row"></div>
+            </div>
+        </div>
+        <div id="dialog-container">
+            <div class="dialog" id="settings-dialog">
+                <div class="dialog-content">
+                    <input type="checkbox" id="keyboard-movement"/>
+                    <div textStroke="Keyboard Movement">Keyboard Movement</div>
+                </div>
+
+                <div class="dialog-content">
+                    <input type="checkbox" id="new-control"/>
+                    <div textStroke="Enable New Control System">Enable New Control System</div>
+                </div>
+
+                <div class="dialog-content">
+                    <input type="checkbox" id="low-resolution"/>
+                    <div textStroke="Low Resolution Graphics (Refresh the page to enable)">Low Resolution Graphics (Refresh the page to enable)</div>
+                </div>
+            </div>
+        </div>
+        <div id="bottom-left-buttons">
+            <button id="btn-craft" class="btn btn-craft-color btn-big-block"></button>
+            <button id="btn-inventory" class="btn btn-blue btn-big-block"></button>
+            <button id="btn-settings" class="btn btn-gray btn-big-block"></button>
+        </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

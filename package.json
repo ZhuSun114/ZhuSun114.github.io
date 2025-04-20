@@ -1,0 +1,27 @@
+{
+    "name": "floer.io",
+    "version": "0.0.1",
+    "description": "",
+    "scripts": {
+        "lint": "eslint . --fix",
+        "lint:ci": "eslint . --max-warnings 0 --ext .js,.ts",
+        "dev": "pnpm -r dev",
+        "build": "pnpm -r build",
+        "dev:client": "cd client && pnpm dev",
+        "dev:server": "cd server && pnpm dev"
+    },
+    "keywords": [],
+    "author": {
+        "name": "Leia",
+        "email": "leia@tutamail.com"
+    },
+    "license": "GPL-3.0",
+    "devDependencies": {
+        "@eslint/js": "^9.23.0",
+        "@stylistic/eslint-plugin": "^1.8.1",
+        "@types/node": "^20.17.28",
+        "eslint": "^9.23.0",
+        "typescript": "^5.8.2",
+        "typescript-eslint": "^7.18.0"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "private": true,
+    "main": "src/server.ts",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/server/src/server.js",
+        "dev": "node -r ts-node/register --watch --watch-path=./src --watch-path=../common src/server.ts"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.9",
+        "@types/nanotimer": "^0.3.2",
+        "@types/node": "^20.12.7",
+        "@types/ws": "^8.5.10",
+        "typescript": "^5.4.5"
+    },
+    "dependencies": {
+        "bit-buffer": "^0.2.5",
+        "dotenv": "^16.4.7",
+        "jsonwebtoken": "^9.0.2",
+        "nanotimer": "^0.3.15",
+        "sqlite3": "^5.1.7",
+        "ts-node": "^10.9.2",
+        "ws": "^8.18.1"
+    }
+}
