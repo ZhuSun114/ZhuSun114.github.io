@@ -173,6 +173,8 @@
             balloon.style.top = `${y}px`;
             
             balloon.addEventListener('click', function handleClick() {
+                if (balloon.classList.contains('popped')) return;
+
                 balloon.classList.add('popped');
                 score++;
                 scoreDisplay.textContent = score;
